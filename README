@@ -2,7 +2,13 @@ IMPORTANT: Edit the file CMakeLists.txt so as to reflect the correct way to
 call and use g++ (CMAKE_CXX_COMPILER) and libstdc++ (target_link_directories) on your
 system.
 
-The values used on my system are temporary, non-standard values, pending the official availablity of gcc-15 on debian stable.
+The values used on my (debian stable) system to access the compiler and the library are temporary, non-standard values, pending 
+the official availablity of gcc-15 on debian stable.
+
+----
+
+drmap2 is functionally more-or-less-identical to drmap; it uses the GeoTIFF elevation files from USGS that have replaced
+the old GridFloat ones that they used to provide.
 
 ----
 

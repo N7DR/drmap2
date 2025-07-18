@@ -38,7 +38,7 @@
 */
 
 /*  
-    drmap
+    drmap2
       -ant  <antenna height>
       
         The height of the antenna. If -imperial is present, the height is in feet, otherwise it is in metres.
