@@ -1,0 +1,135 @@
+IMPORTANT: Edit the file CMakeLists.txt so as to reflect the correct way to
+call and use g++ (CMAKE_CXX_COMPILER) and libstdc++ (target_link_directories) on your
+system.
+
+The values used on my system are temporary, non-standard values, pending the official availablity of gcc-15 on debian stable.
+
+----
+
+    drmap2
+      -ant  <antenna height>
+      
+        The height of the antenna. If -imperial is present, the height is in feet, otherwise it is in metres.
+      
+      -call <callsign>
+      
+        The callsign associated with the plot. Must be present.
+        
+      -cells <number of cells>
+      
+        The number of cells from the centre of the plot to the edges. The default is 3/8 of the width of the plot, in pixels. For
+        the default width of 800, the value is therefore 300.
+        
+      -datadir <directory>
+      
+        The directory that contains USGS GridFloat tiles
+        
+      -elev
+      
+        Create an elevation plot: the plotted values are the elevation of each cell as seen from the antenna. Most are therefore negative.
+        
+      -grad
+      
+        Create a gradient plot: the plotted values are the gradient of the terrain in the direction from the QTH.
+        
+      -hzn [distance limit]
+      
+        Plot the elevation of the horizon around the periphery of the figure. Eye-level is set in the same way as eye-level for the
+        -los option. Only distances out to the distance limit are used in this calculation. If the distance limit value is not present,
+        it is assumed to be the same as the radius of the figure.
+        
+      -imperial
+      
+        Use imperial units instead of metric. That is, miles instead of kilometres and feet instead of metres. Applies both to values
+        on the command line and to values on the output plot(s).
+        
+      -lat <latitude>
+      
+        Latitude in degrees north. If present, -long should also be present.
+        
+      -long <longitude>
+      
+        Longitude in degrees east. If present, -lat should also be present. Note that because the USGS data covers only the
+        US, longitude should be negative; but if it is positive, the program will negate the value before use.
+        
+      -los
+      
+        Create a line-of-sight plot in addition to the standard height-field plot. Eye-level is assumed to be 1.5m or 5 feet, unless
+        the -ant option is presewnt, in which case eye-level is the same as the height of the antenna.
+
+      -outdir <directory>
+      
+        The directory into which the output maps should be written
+        
+      -radius <distance1[,distance2[,distance3...]]>
+      
+        One or more radii for the plot(s), in units of km unless -imperial is present, in which case the units are miles. 
+        
+      -qthdb <QTH database filename>
+      
+        A file linking QTH information to callsigns. Each line of the file should contain three entries pertaining to
+        a station, separated by white space: the callsign, the latitude and the longitude. This database will be used only
+        if one or both of the -lat and -long parameters is missing from the command line.
+        
+      -width <pixels>
+      
+        width, in pixels, of the plot(s). The default is 800. The height is automatically set to be three quarters of this value.
+        
+    Examples:
+      drmap2 -call n7dr -datadir /zfs1/data/usgs/drmap -outdir /tmp/drmap -qthdb ~/radio/qthdb -imperial -ant 50 -radius 2 -los -hzn 5
+      
+        Look up the call "n7dr" (case is ignored) in the file "~/radio/qthdb". Each line in that file is of the form:
+        <callsign>     <latitude>     <longitude>
+        
+        In particular the following line appears in that file on my system:
+        N7DR        40.108016   -105.051700
+        
+        The latitude and longitude information for N7DR are extracted from that file.
+        
+        The program will look for relevant USGS files in the directory "/zfs1/data/usgs/drmap". If it fails to find any needed
+        files, it will download them from the USGS and place them in that directory prior to using them.
+        
+        The program will write output plots in the directory tmp/drmap.
+        
+        The program will use imperial units (miles and feet), and assume an antenna 50 feet above ground.
+        
+        It will generate a height plot displaying a radius of 2 miles around the N7DR QTH.
+        
+        It will also create a line-of-sight plot (showing the terrain visible from 50 feet above ground level).
+        
+        In both plots, the elevation of the horizon as seen from 50 feet above ground level will be drawn around the periphery. The program 
+        will assume that no contribution to the horizon is more than five miles from the QTH.
+        
+      drmap2 -call RMNP -datadir /zfs1/data/usgs/drmap -outdir /tmp/drmap -lat 40.441358 -long -105.753685 -radius 1
+      
+        Create a plot for the point 40°.441358N, 105°.753685W (which is in Rocky Mountain National Park).
+        
+        The program will look for relevant USGS files in the directory "/zfs1/data/usgs/drmap". If it fails to find any needed
+        files, it will download them from the USGS and place them in that directory prior to using them.
+
+        The program will write output plots in the directory tmp/drmap.
+        
+        The program will use metric units (kilometres and metres).
+        
+        It will generate a height plot displaying a radius of 1 kilometre around the designated location.
+        
+      drmap2 -call RMNP -datadir /zfs1/data/usgs/drmap -outdir /tmp/drmap -lat 38.469303 -long -109.739254 -radius 10 -los -hzn 5 -grad -elev
+        
+        Create a plot for the point 40°.441358N, 105°.753685W (which is in Rocky Mountain National Park).
+        
+        The program will look for relevant USGS files in the directory "/zfs1/data/usgs/drmap". If it fails to find any needed
+        files, it will download them from the USGS and place them in that directory prior to using them.
+
+        The program will write output plots in the directory tmp/drmap.
+        
+        The program will use metric units (kilometres and metres).
+        
+        It will generate a height plot displaying a radius of 10 kilometres around the designated location.
+        
+        It will also generate a line-of-sight plot, assuming the default eye level of 1.5m.
+        
+        It will also generate a gradient plot, showing at each point the gradient measured in a direction from the centre of the plot to that point.
+        
+        It will also generate an elevation plot (reminiscent of 1960s tie-dye), showing at each point the elevation angle measured in a direction from the centre
+        of the plot to that point.
+
